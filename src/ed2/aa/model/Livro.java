@@ -12,6 +12,11 @@ public class Livro {
 		this.setIdAutor(idAutor);
 		this.setIdEditora(idEditora);
 	}
+	
+	@Override
+	public String toString(){
+		return this.getTitulo();
+	}
 
 	public int getIsbn() {
 		return isbn;

@@ -13,6 +13,11 @@ public class Editora {
 		this.setEndereco(endereco);
 		this.setTelefone(telefone);
 	}
+	
+	@Override
+	public String toString(){
+		return this.getNome();
+	}
 
 	public int getIdEditora() {
 		return idEditora;

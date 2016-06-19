@@ -12,6 +12,11 @@ public class Autor {
 		this.setNacionalidade(nacionalidade);
 		this.setEmail(email);
 	}
+	
+	@Override
+	public String toString(){
+		return this.getNome();
+	}
 
 	public int getId() {
 		return id;
