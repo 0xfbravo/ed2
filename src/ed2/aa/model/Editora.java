@@ -2,13 +2,13 @@ package ed2.aa.model;
 
 public class Editora {
 
-	private int idEditora;
+	private int id;
 	private String nome;
 	private String endereco;
 	private String telefone;
 	
-	public Editora(int idEditora, String nome, String endereco, String telefone){
-		this.setIdEditora(idEditora);
+	public Editora(int id, String nome, String endereco, String telefone){
+		this.setId(id);
 		this.setNome(nome);
 		this.setEndereco(endereco);
 		this.setTelefone(telefone);
@@ -19,12 +19,12 @@ public class Editora {
 		return this.getNome();
 	}
 
-	public int getIdEditora() {
-		return idEditora;
+	public int getId() {
+		return id;
 	}
 
-	public void setIdEditora(int idEditora) {
-		this.idEditora = idEditora;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNome() {
