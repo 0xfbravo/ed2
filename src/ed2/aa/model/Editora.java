@@ -1,11 +1,23 @@
 package ed2.aa.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Editora {
 
 	private int id;
 	private String nome;
 	private String endereco;
 	private String telefone;
+	private Map<String,Integer> modelo = new HashMap<String,Integer>();
+	
+	public Editora(){
+		// Editora (id_editora, nome, endereco, telefone)
+		this.getModelo().put("id_editora", 0);
+		this.getModelo().put("nome", 1);
+		this.getModelo().put("endereco", 2);
+		this.getModelo().put("telefone", 3);
+	}
 	
 	public Editora(int id, String nome, String endereco, String telefone){
 		this.setId(id);
@@ -49,5 +61,13 @@ public class Editora {
 
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
+	}
+
+	public Map<String,Integer> getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(Map<String,Integer> modelo) {
+		this.modelo = modelo;
 	}
 }
