@@ -11,6 +11,22 @@ import ed2.aa.model.Editora;
 import ed2.aa.model.Livro;
 
 public class Arquivo {
+	
+	public static void visualizar(File arquivo){
+		try{
+			RandomAccessFile leitura = new RandomAccessFile(arquivo,"r");
+			while(leitura.getFilePointer() < leitura.length()){
+				String linha = leitura.readUTF();
+				System.out.println(linha);
+			}
+			leitura.close();
+			// Remove arquivo de Consulta
+			arquivo.delete();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
 
 	public static void converterEmBytes(String entrada, String saida){
 		try{
@@ -34,7 +50,7 @@ public class Arquivo {
 			String t = tabela.toLowerCase();
 			ArrayList<Object> objetos = new ArrayList<Object>();
 			Map<String,Integer> modelo = Consulta.buscarModelo(t);
-			RandomAccessFile leitura = new RandomAccessFile(arquivo,"rw");
+			RandomAccessFile leitura = new RandomAccessFile(arquivo,"r");
 			
 			while(leitura.getFilePointer() < leitura.length()){
 				// Ler uma linha inteira, em UTF

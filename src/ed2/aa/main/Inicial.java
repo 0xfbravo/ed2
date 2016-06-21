@@ -21,8 +21,6 @@ public class Inicial {
 		//Arquivo.converterEmBytes("editora.txt", "editora.dat");
 		//Arquivo.converterEmBytes("livro.txt", "livro.dat");
 		
-		//buscarTelefoneEditora("Editora Orleans");
-		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		bemVindo();
 		menu();
@@ -84,10 +82,7 @@ public class Inicial {
 	}
 	
 	public static void buscarLivrosAutor(String nome){
-		File selecao = Consulta.selecao("autor", "nome", nome);
-		String tabelaSelecao = selecao.getName().replaceAll(".dat", "");
-		File projecao = Consulta.projecao(tabelaSelecao, "id");
-		Arquivo.visualizar(projecao);
+
 	}
 	
 	public static void buscarEditora(String id_editora){
@@ -111,9 +106,12 @@ public class Inicial {
 	}
 	
 	public static void buscarTelefoneEditora(String nome){
+		ArrayList<String> colunas = new ArrayList<String>();
+		colunas.add("telefone");
+		
 		File selecao = Consulta.selecao("editora", "nome", nome);
 		String tabelaSelecao = selecao.getName().replaceAll(".dat", "");
-		File projecao = Consulta.projecao(tabelaSelecao, "telefone");
+		File projecao = Consulta.projecao(tabelaSelecao, colunas);
 		System.out.println("Telefone da "+nome);
 		Arquivo.visualizar(projecao);
 		System.out.println("");

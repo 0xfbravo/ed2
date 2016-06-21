@@ -3,6 +3,7 @@ package ed2.aa.database;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
@@ -88,8 +89,8 @@ public class Consulta{
 	}
 	
 	// π - pi
-	public static File projecao(String tabela, String coluna){
-		if(tabela.isEmpty() || coluna.isEmpty()){
+	public static File projecao(String tabela, ArrayList<String> colunas){
+		if(tabela.isEmpty() || colunas.size() < 1){
 			System.out.println("Parâmetros de Projeção não preenchidos corretamente.");
 			System.out.println("Utilização: projecao(tabela,coluna).");
 			System.out.println("Finalizando execução do Programa.");
@@ -108,11 +109,13 @@ public class Consulta{
 			
 			File arquivoEscrita = new File("project_"+t+"_"+random+".dat");
 			
-			// Verifica se a Key existe no modelo, caso contrário encerra a execução.
-			if(!modelo.containsKey(coluna)){
-				System.out.println("A Coluna informada não existe na Tabela.");
-				System.out.println("Finalizando execução do Programa.");
-				System.exit(1);
+			for(String c: colunas){
+				// Verifica se a Key existe no modelo, caso contrário encerra a execução.
+				if(!modelo.containsKey(c)){
+					System.out.println("A Coluna informada não existe na Tabela.");
+					System.out.println("Finalizando execução do Programa.");
+					System.exit(1);
+				}
 			}
 			
 			// Ler ''tabela.dat'', onde tabela é informada pelo Usuário
@@ -128,11 +131,17 @@ public class Consulta{
 				// Remover '/n' do final da String
 				linha = linha.substring(0, linha.length()-1);
 				// Separar Colunas do Arquivo
-				String[] colunas = linha.split("\t");
+				String[] colunasTabela = linha.split("\t");
 				// Acessar coluna correta do modelo
-				String valor = colunas[modelo.get(coluna)];
+				StringBuilder valores = new StringBuilder();
+				for(String c: colunas){
+					valores.append(colunasTabela[modelo.get(c)]);
+					valores.append("\t");
+				}
+				String valoresTratados = valores.toString();
+				valoresTratados = valoresTratados.substring(0, valoresTratados.length()-1);
 				// Escrever no Arquivo elementos que na Coluna X, tenham valores iguais ao comparador.
-				escrita.writeUTF(valor);
+				escrita.writeUTF(valoresTratados);
 			}
 			
 			// TODO: Remover Duplicatas
