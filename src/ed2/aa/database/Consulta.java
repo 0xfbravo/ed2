@@ -27,15 +27,27 @@ public class Consulta{
 	
 	// σ - sigma
 	public static File selecao(String tabela, String coluna, String comparacao){
+		if(tabela.isEmpty() || coluna.isEmpty()){
+			System.out.println("Parâmetros de Seleção não preenchidos corretamente.");
+			System.out.println("Utilização: selecao(tabela,coluna,comparacao).");
+			System.out.println("Finalizando execução do Programa.");
+			System.exit(1);
+		}
 		try{
 			String t = tabela.toLowerCase();
 			int random = new Random().nextInt(3000);
-			Map<String,Integer> modelo = null;
+			Map<String,Integer> modelo = buscarModelo(t);
 			File arquivoEscrita = new File("select_"+t+"_"+random+".dat");
-			modelo = buscarModelo(t);
+			
+			// Verifica se a Key existe no modelo, caso contrário encerra a execução.
+			if(!modelo.containsKey(coluna) && coluna.compareTo("*") != 0){
+				System.out.println("A Coluna informada não existe na Tabela.");
+				System.out.println("Finalizando execução do Programa.");
+				System.exit(1);
+			}
 			
 			// Ler ''tabela.dat'', onde tabela é informada pelo Usuário
-			RandomAccessFile leitura = new RandomAccessFile(t+".dat","rw");
+			RandomAccessFile leitura = new RandomAccessFile(t+".dat","r");
 			// Criar e inserir dados em ''select_tabela_(random)'', onde tabela é informada pelo Usuário
 			// e (random) é um inteiro aleatório gerado pelo sistema.
 			RandomAccessFile escrita = new RandomAccessFile(arquivoEscrita,"rw");
@@ -56,11 +68,15 @@ public class Consulta{
 				// Acessar coluna correta do modelo
 				String valor = colunas[modelo.get(coluna)];
 
-				// Escrever no Arquivo toda a Coluna, caso não seja informada a Comparacao.
-				if(comparacao.isEmpty()){ escrita.writeUTF(valor); continue; }
 				// Escrever no Arquivo elementos que na Coluna X, tenham valores iguais ao comparador.
 				if(comparacao.compareTo(valor) == 0){ escrita.writeUTF(linha); continue; }
 			}
+			
+			// Caso atinja o final do arquivo, sem resultados
+			if((leitura.getFilePointer() == leitura.length()) && escrita.length() < 1){
+				System.out.println("O Registro não foi encontrado.");
+			}
+			
 			leitura.close();
 			escrita.close();
 			return arquivoEscrita;
@@ -72,7 +88,66 @@ public class Consulta{
 	}
 	
 	// π - pi
-	public static RandomAccessFile projecao(){
+	public static File projecao(String tabela, String coluna){
+		if(tabela.isEmpty() || coluna.isEmpty()){
+			System.out.println("Parâmetros de Projeção não preenchidos corretamente.");
+			System.out.println("Utilização: projecao(tabela,coluna).");
+			System.out.println("Finalizando execução do Programa.");
+			System.exit(1);
+		}
+		try{
+			String t = tabela.toLowerCase();
+			int random = new Random().nextInt(3000);
+			Map<String,Integer> modelo = null;
+			if(t.contains("select") || t.contains("project")){
+				String[] m = t.split("_");
+				modelo = buscarModelo(m[1]);
+			} else {
+				modelo = buscarModelo(t);
+			}
+			
+			File arquivoEscrita = new File("project_"+t+"_"+random+".dat");
+			
+			// Verifica se a Key existe no modelo, caso contrário encerra a execução.
+			if(!modelo.containsKey(coluna)){
+				System.out.println("A Coluna informada não existe na Tabela.");
+				System.out.println("Finalizando execução do Programa.");
+				System.exit(1);
+			}
+			
+			// Ler ''tabela.dat'', onde tabela é informada pelo Usuário
+			RandomAccessFile leitura = new RandomAccessFile(t+".dat","r");
+			// Criar e inserir dados em ''select_tabela_(random)'', onde tabela é informada pelo Usuário
+			// e (random) é um inteiro aleatório gerado pelo sistema.
+			RandomAccessFile escrita = new RandomAccessFile(arquivoEscrita,"rw");
+
+			// Leitura do Arquivo Completo
+			while(leitura.getFilePointer() < leitura.length()){
+				// Ler uma linha inteira, em UTF
+				String linha = leitura.readUTF();
+				// Remover '/n' do final da String
+				linha = linha.substring(0, linha.length()-1);
+				// Separar Colunas do Arquivo
+				String[] colunas = linha.split("\t");
+				// Acessar coluna correta do modelo
+				String valor = colunas[modelo.get(coluna)];
+				// Escrever no Arquivo elementos que na Coluna X, tenham valores iguais ao comparador.
+				escrita.writeUTF(valor);
+			}
+			
+			// TODO: Remover Duplicatas
+			
+			leitura.close();
+			escrita.close();
+			return arquivoEscrita;
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static File NestedLoop(){
 		return null;
 	}
 	
